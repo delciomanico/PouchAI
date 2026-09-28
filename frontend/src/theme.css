@@ -1,0 +1,56 @@
+/*
+ * Tokens de tema — única fonte de verdade para cores, tipografia e
+ * espaçamento usados em toda a app. Valores herdados do protótipo Qt/QML
+ * arquivado em reference-qt-ui/ui/theme/Theme.qml (paleta clara,
+ * neutra-quente), não inventados de novo.
+ */
+:root {
+    --color-background: #f5f3ee;
+    --color-surface: #ffffff;
+    --color-surface-sunken: #f3f0e7;
+    --color-border: #e7e3d8;
+    --color-border-strong: #dfdac9;
+
+    --color-text-primary: #201f1b;
+    --color-text-secondary: #3a362d;
+    --color-text-muted: #6b6759;
+    --color-text-faint: #8c8778;
+
+    --color-accent: #0050a0;
+    --color-accent-soft: #e3edf9;
+    --color-accent-light: #1c6bc2;
+    --color-accent-dark: #003b78;
+
+    --color-success: #1e8f5f;
+    --color-success-soft: #e6f4ea;
+    --color-warning: #b8860b;
+    --color-warning-soft: #fbf1dc;
+    --color-danger: #b84b3e;
+    --color-danger-soft: #fbeae7;
+
+    --font-ui: 'Manrope', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-md: 13px;
+    --font-size-base: 14px;
+    --font-size-lg: 15px;
+    --font-size-xl: 17px;
+    --font-size-xxl: 22px;
+    --font-size-display: 26px;
+
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 22px;
+    --space-xl: 32px;
+    --space-xxl: 44px;
+
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 18px;
+    --radius-pill: 9999px;
+}

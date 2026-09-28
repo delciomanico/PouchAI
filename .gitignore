@@ -1,0 +1,8 @@
+build/bin
+node_modules
+frontend/dist
+ai-worker/build
+search-service/build
+llm-service/build
+internal/db/schema.sql
+/DocumentApp.exe

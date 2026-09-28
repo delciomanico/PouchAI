@@ -1,0 +1,921 @@
+#app-shell {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    height: 32px;
+    padding: 0 var(--space-xs) 0 var(--space-sm);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    /* Deixa arrastar a janela pela barra mesmo com moldura nativa —
+       inofensivo quando já há um título do SO, útil se algum dia
+       passar a Frameless. */
+    --wails-draggable: drag;
+}
+
+.titlebar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+}
+
+.titlebar-logo {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+}
+
+.titlebar-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.titlebar-actions {
+    display: flex;
+    gap: 2px;
+    --wails-draggable: no-drag;
+}
+
+.titlebar-btn {
+    width: 28px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1;
+    cursor: pointer;
+}
+
+.titlebar-btn:hover {
+    background: var(--color-surface-sunken);
+}
+
+.titlebar-btn-close:hover {
+    background: var(--color-danger);
+    color: white;
+}
+
+.titlebar-btn-active {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+}
+
+.sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: var(--space-md);
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: left;
+    transition: width 0.18s ease, opacity 0.15s ease;
+}
+
+/* Recolhido ao clicar de novo no ícone já ativo da ActivityBar — ver
+   handleSelectPanel em App.tsx. */
+.sidebar-collapsed {
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    border-right: none;
+}
+
+.sidebar-panel-inner {
+    width: 228px; /* 260px - padding horizontal (2 * var(--space-md)) */
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.sidebar-header h1 {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin: 0;
+}
+
+.main-panel {
+    flex: 1;
+    padding: var(--space-lg);
+    overflow-y: auto;
+    text-align: left;
+}
+
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.main-header h2 {
+    margin: 0;
+    font-size: var(--font-size-xxl);
+}
+
+.muted {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+}
+
+.error-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+    border-radius: var(--radius-md);
+    padding: var(--space-xs) var(--space-sm);
+    margin-bottom: var(--space-md);
+    animation: popup-in 0.18s ease;
+    font-size: var(--font-size-md);
+}
+
+.error-banner button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+}
+
+.btn-icon,
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    padding: var(--space-xxs) var(--space-sm);
+    cursor: pointer;
+}
+
+.btn-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+    font-size: var(--font-size-lg);
+    padding: 0;
+}
+
+.btn-primary {
+    background: var(--color-accent);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--color-surface-sunken);
+    color: var(--color-text-secondary);
+    border-color: var(--color-border);
+}
+
+.btn-danger {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.new-folder-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    background: var(--color-surface-sunken);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm);
+    margin-bottom: var(--space-md);
+    animation: popup-in 0.18s ease;
+}
+
+.new-folder-form input[type='text'],
+.new-folder-form input:not([type]) {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-base);
+    padding: var(--space-xxs) var(--space-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.gradient-picker {
+    display: flex;
+    gap: var(--space-xxs);
+}
+
+.gradient-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-pill);
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+.gradient-swatch.selected {
+    border-color: var(--color-text-primary);
+}
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+    font-size: var(--font-size-md);
+    color: var(--color-text-secondary);
+}
+
+.form-actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.folder-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+}
+
+.folder-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+}
+
+.folder-list-item .folder-item {
+    flex: 1;
+    min-width: 0;
+}
+
+.btn-icon-ghost {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: var(--radius-pill);
+    background: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    line-height: 1;
+    cursor: pointer;
+}
+
+.btn-icon-ghost:hover {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.folder-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    width: 100%;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: var(--space-xs);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-align: left;
+}
+
+.folder-item:hover {
+    background: var(--color-surface-sunken);
+}
+
+.folder-item.selected {
+    background: var(--color-accent-soft);
+    border-color: var(--color-accent);
+}
+
+.folder-name {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.badge {
+    font-size: var(--font-size-xs);
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    border-radius: var(--radius-pill);
+    padding: 1px var(--space-xxs);
+}
+
+.document-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+/* --wails-drop-target/--wails-drop-target-active: activa o drag-and-drop
+   nativo do Wails (ver main.go, options.DragAndDrop) só dentro desta
+   lista — largar um ficheiro do Explorador fora daqui não faz nada. */
+.document-drop-zone {
+    --wails-drop-target: drop;
+    min-height: 40px;
+    border-radius: var(--radius-md);
+}
+
+.drop-hint {
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    text-align: center;
+}
+
+.document-row-wrapper {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.document-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.document-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.document-info-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    padding: 0;
+    text-align: left;
+}
+
+.document-name {
+    font-size: var(--font-size-base);
+}
+
+.document-actions {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+}
+
+.document-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xxs) var(--space-sm);
+    margin: 0;
+    padding: var(--space-sm);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-sunken);
+    font-size: var(--font-size-md);
+}
+
+.document-details dt {
+    color: var(--color-text-muted);
+}
+
+.document-details dd {
+    margin: 0;
+    color: var(--color-text-primary);
+}
+
+.status-badge {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-pill);
+    padding: 2px var(--space-xs);
+}
+
+.status-ready {
+    background: var(--color-success-soft);
+    color: var(--color-success);
+}
+
+.status-pending_review,
+.status-uploading,
+.status-processing {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+}
+
+.status-failed,
+.status-rejected {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.search-bar {
+    display: flex;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-md);
+}
+
+.search-bar input {
+    flex: 1;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-base);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.search-results {
+    margin-bottom: var(--space-lg);
+}
+
+.search-answer-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    cursor: pointer;
+    animation: popup-in 0.18s ease;
+}
+
+.search-answer-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-accent);
+}
+
+.search-summary {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-md);
+}
+
+.search-hit-row {
+    cursor: pointer;
+    align-items: flex-start;
+}
+
+/* Página de pré-visualização de documento */
+
+.preview-page,
+.ingest-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    height: 100%;
+}
+
+.preview-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.preview-header-actions {
+    display: flex;
+    gap: var(--space-xs);
+    margin-left: auto;
+}
+
+.preview-body {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: auto;
+    background: var(--color-surface-sunken);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: var(--radius-sm);
+}
+
+.preview-pdf {
+    width: 100%;
+    height: 100%;
+    min-height: 60vh;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: white;
+}
+
+/* Página de ingestão (Adicionar documento) */
+
+.ingest-stepper {
+    display: flex;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ingest-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+}
+
+.ingest-step-dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    font-size: var(--font-size-xs);
+    flex-shrink: 0;
+}
+
+.ingest-step.active {
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.ingest-step.active .ingest-step-dot {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.ingest-step.done .ingest-step-dot {
+    background: var(--color-success);
+    border-color: var(--color-success);
+    color: white;
+}
+
+.ingest-review {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+}
+
+.ingest-review h3 {
+    margin: 0 0 var(--space-sm) 0;
+}
+
+.ingest-review-actions {
+    display: flex;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+}
+
+.ingest-classifying {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    margin: 0 0 var(--space-sm) 0;
+}
+
+.ingest-no-text-warning {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs) var(--space-sm);
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-base);
+}
+
+.ingest-edit-input {
+    width: 100%;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-md);
+    padding: var(--space-xxs) var(--space-xs);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.ingest-failed {
+    background: var(--color-danger-soft);
+    border: 1px solid var(--color-danger);
+    color: var(--color-danger);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+}
+
+/* Sidebar de chat com o assistente de IA local — espelho visual da
+   sidebar esquerda de pastas, mas do outro lado. */
+
+.chat-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border);
+    padding: var(--space-md);
+    min-height: 0;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.chat-message {
+    border-radius: var(--radius-md);
+    padding: var(--space-xs) var(--space-sm);
+    font-size: var(--font-size-md);
+}
+
+.chat-message p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.chat-message-user {
+    background: var(--color-surface-sunken);
+    align-self: flex-end;
+    max-width: 90%;
+}
+
+.chat-message-assistant {
+    background: var(--color-accent-soft);
+    align-self: flex-start;
+    max-width: 90%;
+}
+
+.chat-message-error {
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
+}
+
+.chat-sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xxs);
+    margin-top: var(--space-xs);
+}
+
+.chat-source-chip {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xxs);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+    padding: 2px var(--space-xs);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+
+.chat-source-chip:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.chat-input-form {
+    display: flex;
+    gap: var(--space-xs);
+    flex-shrink: 0;
+}
+
+.chat-input-form input {
+    flex: 1;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-md);
+    padding: var(--space-xs) var(--space-sm);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+/* Barra de atividades — rail de ícones à VSCode, ver ActivityBar.tsx.
+   Fica sempre visível, entre a TitleBar e o painel expansível (.sidebar). */
+
+.activity-bar {
+    width: 48px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) 0;
+    background: var(--color-surface-sunken);
+    border-right: 1px solid var(--color-border);
+}
+
+.activity-bar-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.activity-bar-btn:hover {
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    transform: translateY(-1px);
+}
+
+.activity-bar-btn.active {
+    background: var(--color-accent-soft);
+    color: var(--color-accent);
+}
+
+/* Painéis "em breve" (Grupos/Perfil) e Definições. */
+
+.placeholder-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-xs);
+    padding: var(--space-xl) var(--space-sm);
+}
+
+.placeholder-panel h2 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+}
+
+.settings-panel h2 {
+    margin: 0 0 var(--space-sm) 0;
+    font-size: var(--font-size-lg);
+}
+
+.settings-panel .document-details {
+    border-top: none;
+    background: none;
+    padding: 0;
+    margin-bottom: var(--space-sm);
+}
+
+/* Transição de página: a div interna do main-panel remonta sempre que
+   "view" muda (key={view} em App.tsx), o que por si só já dispara esta
+   animação de entrada — não precisa de nenhuma lib de transições. */
+
+.page-transition {
+    height: 100%;
+    animation: page-fade-in 0.2s ease;
+}
+
+@keyframes page-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Popups (formulários/banners que aparecem e desaparecem) — uma entrada
+   suave em vez de aparecerem de repente. */
+
+@keyframes popup-in {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Mascote (logo do canguru) animada — ver Mascot.tsx. A imagem em si é
+   um raster (pouch-logo.jpg), por isso anima-se com transform/opacity
+   em vez de tentar recriar o desenho como SVG. */
+
+.mascot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mascot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    display: block;
+}
+
+.mascot-bounce .mascot-img {
+    animation: mascot-hop 0.9s ease-in-out infinite;
+}
+
+.mascot-pulse .mascot-img {
+    animation: mascot-pulse 1.4s ease-in-out infinite;
+}
+
+.mascot-wiggle .mascot-img {
+    animation: mascot-wiggle 0.6s ease-out;
+}
+
+@keyframes mascot-hop {
+    0%,
+    100% {
+        transform: translateY(0) scaleX(1);
+    }
+    35% {
+        transform: translateY(-8px) scaleX(0.96);
+    }
+    55% {
+        transform: translateY(0) scaleX(1.04);
+    }
+}
+
+@keyframes mascot-pulse {
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.08);
+        opacity: 0.85;
+    }
+}
+
+@keyframes mascot-wiggle {
+    0% {
+        transform: rotate(0deg) scale(0.6);
+        opacity: 0;
+    }
+    50% {
+        transform: rotate(-8deg) scale(1.05);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+.mascot-loading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+}
